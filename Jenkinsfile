@@ -45,10 +45,8 @@ pipeline {
         stage ("Commit version update") {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: "github-key")]) {
-                        sh 'git remote add origin git@github.com:nikolozjakhua/java-maven.git'
-			sh 'touch .gitignore'
-			sh 'echo '/target' > .gitignore'
+                    withCredentials([sshUserPrivateKey(credentialsId: "github-key", usernameVariable: "USER", privateKeyVariable: "PKEY")]) {
+                        sh "git remote add origin git@github.com:nikolozjakhua/java-maven.git -u $USER -p $PKEY"
                         sh 'git add .'
                         sh "git commit -m 'ci: version bump $BUILD_NUMBER'"
                         sh 'git push origin HEAD:main'
