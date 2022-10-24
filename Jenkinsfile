@@ -45,7 +45,7 @@ pipeline {
         stage ("change pom.xml") {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsID: "jenkins-push", usernameVariable: "USER", passwordVariable: "PWD")]) {
+                    withCredentials([usernamePassword(credentialsId: "jenkins-push", usernameVariable: "USER", passwordVariable: "PWD")]) {
                         sh 'git status'
                         sh 'git config -l'
                         sh "git remote add origin git@gitlab.com/nikolozjakhua/java-maven"
