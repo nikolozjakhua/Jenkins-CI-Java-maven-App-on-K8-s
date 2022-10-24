@@ -53,7 +53,7 @@ pipeline {
 			sh "git remote set-url origin git@github.com:${USER}/java-maven.git | echo $PWD"
                         sh 'git add .'
                         sh "git commit -m 'Ci: Version bump $IMAGE_NAME'"
-			sh "git push origin HEAD:main | echo $PWD"
+			sh "git push origin HEAD:main | echo Momavali!23"
                     }
                 }
             }
