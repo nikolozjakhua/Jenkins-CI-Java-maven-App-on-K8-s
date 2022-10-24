@@ -48,10 +48,10 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "jenkins-push", usernameVariable: "USER", passwordVariable: "PWD")]) {
                         sh 'git status'
                         sh 'git config -l'
-                        sh "git remote add origin git@github.com:nikolozjakhua/java-maven.git"
+			sh "git remote set-url origin https://${USER}:${PWD}github.com:nikolozjakhua/java-maven.git"
                         sh 'git add .'
                         sh "git commit -m 'Ci: Version bump $IMAGE_NAME'"
-                        sh "git push -u origin HEAD:main -u $USER -p $PWD"
+			sh "git push origin HEAD:main"
                     }
                 }
             }
