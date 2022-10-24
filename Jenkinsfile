@@ -42,6 +42,19 @@ pipeline {
                 }
             }
         }
+        stage ("change pom.xml") {
+            steps {
+                script {
+                    withCredentials([credentialsID: 'jenkins-push', usernameVariable: "USER", passwordVariable: "PWD"]) {
+                        sh 'git status'
+                        sh 'git config -l'
+                        sh "git remote add origin git@gitlab.com/nikolozjakhua/java-maven"
+                        sh 'git add .'
+                        sh "git commit -m 'Ci: Version bump $IMAGE_NAME'"
+                        sh "git push -u origin HEAD:main -u $USER -p $PWD"
+                    }
+                }
+            }
+        }
     }
-
 }
