@@ -50,7 +50,7 @@ pipeline {
 			sh 'git config --global user.name "nikolozjakhua"'
                         sh 'git status'
                         sh 'git config -l'
-			sh "echo $PWD | git remote set-url origin git@github.com:${USER}/java-maven.git --password-stdin"
+			sh "git remote set-url origin git@github.com:${USER}/java-maven.git | echo $PWD"
                         sh 'git add .'
                         sh "git commit -m 'Ci: Version bump $IMAGE_NAME'"
 			sh "git push origin HEAD:main"
