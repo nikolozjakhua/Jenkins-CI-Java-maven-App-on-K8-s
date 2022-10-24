@@ -42,21 +42,5 @@ pipeline {
                 }
             }
         }
-        stage ("change pom.xml") {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: "jenkins-push", usernameVariable: "USER", passwordVariable: "PWD")]) {
-			sh 'git config --global user.email "nikolozjakhua@gmail.com"'
-			sh 'git config --global user.name "nikolozjakhua"'
-                        sh 'git status'
-                        sh 'git config -l'
-			sh "git remote set-url origin git@github.com:${USER}/java-maven.git | echo $PWD"
-                        sh 'git add .'
-                        sh "git commit -m 'Ci: Version bump $IMAGE_NAME'"
-			sh "git push origin HEAD:main | echo Momavali!23"
-                    }
-                }
-            }
-        }
     }
 }
