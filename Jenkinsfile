@@ -32,7 +32,6 @@ pipeline {
                         sh "echo $PASS | docker login -u $USER --password-stdin"
                         sh "docker push nikolozjakhua/my-app:$IMAGE_NAME"
                     }
-
                 }
             }
         }
@@ -40,6 +39,18 @@ pipeline {
             steps {
                 script {
                     echo "Deploying the Application..."
+                }
+            }
+        }
+        stage ("Commit version update") {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid"]) {
+                        sh 'git remote set-url origin git@github.com:nikolozjakhua/java-maven.git'
+                        sh 'git add .'
+                        sh "git commit -m 'ci: version bump $BUILD_NUMBER'"
+                        sh 'git push origin HEAD:main'
+                    }
                 }
             }
         }
