@@ -45,7 +45,7 @@ pipeline {
         stage ("Commit version update") {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid"]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: "yourkeyid")]) {
                         sh 'git remote set-url origin git@github.com:nikolozjakhua/java-maven.git'
 			sh 'touch .gitignore'
 			sh 'cat /target > .gitignore'
