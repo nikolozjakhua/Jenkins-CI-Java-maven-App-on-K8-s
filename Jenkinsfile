@@ -46,7 +46,7 @@ pipeline {
                         sh "git remote add origin git@github.com:${USER}/java-maven.git"
                         sh 'git add .'
                         sh "git commit -m 'Ci: Version bump $IMAGE_NAME'"
-                        sh "git push origin HEAD:main | echo "${USER} | echo ${PWD}"
+                        sh "git push origin HEAD:main"
                     }
                 }
             }
