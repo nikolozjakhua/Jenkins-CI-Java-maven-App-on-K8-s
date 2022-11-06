@@ -4,17 +4,17 @@ pipeline {
         maven 'Maven'
     }
     stages {
-	stage('increment version') {
-	    steps {
-		script {
-		    echo 'incrementing app version...'
-		    sh "mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} versions:commit"
-		    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
-		    def version = matcher[0][1]
-		    IMAGE_NAME = "$version-$BUILD_NUMBER"
-		}
-	    }
-	}
+        stage('increment version') {
+            steps {
+                script {
+                    echo 'incrementing app version...'
+                    sh "mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} versions:commit"
+                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                    def version = matcher[0][1]
+                    IMAGE_NAME = "$version-$BUILD_NUMBER"
+                }
+            }
+        }
         stage ("build jar") {
             steps {
                 script {
@@ -35,10 +35,19 @@ pipeline {
                 }
             }
         }
-        stage ("Deploying") {
+        stage ("Commit Version Update") {
             steps {
                 script {
-                    echo "Deploying the Application..."
+                    withCredentials([sshUserPrivateKey(credentialsId: 'github-creds', keyFileVariable: '', passphraseVariable: 'PWD', usernameVariable: 'USER')]) {
+                        sh 'git config --global user.email "nikolozjakhua@gmail.com"'
+                        sh 'git config --global user.name "nikolozjakhua"'
+                        sh 'git status'
+                        sh 'git config -l'
+                        sh "git remote add origin git@github.com:${USER}/java-maven.git"
+                        sh 'git add .'
+                        sh "git commit -m 'Ci: Version bump $IMAGE_NAME'"
+                        sh "git push origin HEAD:main | echo "${USER} | echo ${PWD}"
+                    }
                 }
             }
         }
