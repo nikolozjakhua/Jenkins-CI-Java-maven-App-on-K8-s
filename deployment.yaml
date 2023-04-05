@@ -13,8 +13,8 @@ spec:
     metadata:
       labels:
         app: $APP_NAME
-    spec:
-      containers:
+    specs:
+      container:
       - name: $APP_NAME
         image: nikolozjakhua/my-app:$IMAGE_NAME
         imagePullPolicy: Always
