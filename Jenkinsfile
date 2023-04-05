@@ -28,9 +28,9 @@ pipeline {
                 script {
                     echo "Building the docker image"
                     withCredentials([usernamePassword(credentialsId: 'docker-creds', passwordVariable: 'PASS', usernameVariable: "USER")]) {
-                        sh "docker build -t nikolozjakhua/my-app:$IMAGE_NAME ."
+                        sh "docker build -t $USERNAME/my-app:$IMAGE_NAME ."
                         sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push nikolozjakhua/my-app:$IMAGE_NAME"
+                        sh "docker push $USERNAME/my-app:$IMAGE_NAME"
                     }
                 }
             }
@@ -53,8 +53,8 @@ pipeline {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'github-creds', keyFileVariable: '', passphraseVariable: 'PWD', usernameVariable: 'USER')]) {
-                        sh 'git config --global user.email "nikolozjakhua@gmail.com"'
-                        sh 'git config --global user.name "nikolozjakhua"'
+                        sh 'git config --global user.email $EMAIL'
+                        sh 'git config --global user.name $USERNAME'
                         sh 'git status'
                         sh 'git config -l'
                         sh "git remote add origin git@github.com:${USER}/java-maven.git"
